@@ -1,43 +1,28 @@
 package br.fiap.com.ms.produto.controller;
 
-import br.fiap.com.ms.produto.dto.ProdutoInputDTO;
-import br.fiap.com.ms.produto.dto.ProdutoResponseDTO;
-import br.fiap.com.ms.produto.entities.Produto;
+import br.fiap.com.ms.produto.Services.ProdutoService;
+import br.fiap.com.ms.produto.dto.ProdutoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController // definiçâo
 @RequestMapping("/produtos") // mapeamento da requisiçâo
 public class ProdutoController {
 
-//    @GetMapping
-//    public ResponseEntity<List<Produto>> getProduto(){
-//        //mockando dados para teste
-//        List<Produto> produtos = new ArrayList<>();
-//
-//        produtos.add (new Produto(1L,"Smart TV", "Smart TV LG LED 50 polegadas", 2285.0));
-//        produtos.add (new Produto(2L,"Mouse Microsoft", "Mouse sem fio", 250.0));
-//        produtos.add (new Produto(3L,"Teclado Microsoft", "Teclado sem fio", 278.95));
-//
-//        return ResponseEntity.ok(produtos);
-//    }
+    @Autowired
+    private ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoResponseDTO>> getProduto(){
+    public ResponseEntity<List<ProdutoDTO>> getAllProdutos(){
 
-        List<ProdutoResponseDTO> dto = ProdutoResponseDTO.creaMock();
-        return ResponseEntity.ok(dto);
-    }
+        List<ProdutoDTO> list = produtoService.findAllProdutos();
 
-    @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> createProduto(
-            @RequestBody ProdutoInputDTO inputDTO){
-        ProdutoResponseDTO dto = new ProdutoResponseDTO(1L,
-                inputDTO.getNome(), inputDTO.getDescricao(), inputDTO.getValor());
-
-        return ResponseEntity.created(null).body(dto);
+        return ResponseEntity.ok(list);
     }
 }
