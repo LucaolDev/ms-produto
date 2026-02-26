@@ -25,15 +25,51 @@ public class ProdutoService {
     }
 
     @Transactional(readOnly = true)
-    public ProdutoDTO findAllProdutoById(Long id){
+    public ProdutoDTO findProdutoById(Long id){
 
         Produto produto = produtoRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Recurso não encontrado. ID: " + id)
 
         );
         return new ProdutoDTO(produto);
+    }
 
+    @Transactional
+    public ProdutoDTO saveProduto(ProdutoDTO produtoDTO){
 
+        Produto produto = new Produto();
+        copyDtoToProduto(produtoDTO, produto);
+        produto= produtoRepository.save(produto);
+        return new ProdutoDTO(produto);
+    }
+
+    private void copyDtoToProduto(ProdutoDTO produtoDTO, Produto produto) {
+
+        produto.setNome(produtoDTO.getNome());
+        produto.setDescricao(produtoDTO.getDescricao());
+        produto.setValor(produtoDTO.getValor());
+    }
+
+    @Transactional
+    public ProdutoDTO updateProduto(Long id, ProdutoDTO produtoDTO){
+
+        try {
+            Produto produto = produtoRepository.getReferenceById(id);
+            copyDtoToProduto(produtoDTO, produto);
+            produto =  produtoRepository.save(produto);
+            return new ProdutoDTO(produto);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Recurso não encontrado. ID: " + id);
+        }
+    }
+
+    @Transactional
+    public void deleteProdutoById(Long id){
+
+        if(!produtoRepository.existsById(id)){
+            throw new EntityNotFoundException("Recurso não encontrado. ID: " + id);
+        }
+        produtoRepository.deleteById(id);
     }
 
 }
