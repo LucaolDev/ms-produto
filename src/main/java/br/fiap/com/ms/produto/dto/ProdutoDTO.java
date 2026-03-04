@@ -2,6 +2,7 @@ package br.fiap.com.ms.produto.dto;
 
 import br.fiap.com.ms.produto.entities.Produto;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,8 @@ public class ProdutoDTO {
     @NotBlank(message = "Campo descrição é requerido")
     @Size(min = 10, message = "A descrição deve conter no minimo 10 caracteres")
     private String descricao;
-    @NotBlank(message = "Campo valor é requerido")
-    @Positive(message = "A campo valor não pode ser menor que 0")
+    @NotNull(message = "Campo valor é requerido")
+    @Positive(message = "O campo valor não pode ser menor que 0")
     private Double valor;
 
     public ProdutoDTO(Produto produto) {

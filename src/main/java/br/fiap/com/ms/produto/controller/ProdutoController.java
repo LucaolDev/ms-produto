@@ -2,7 +2,10 @@ package br.fiap.com.ms.produto.controller;
 
 import br.fiap.com.ms.produto.Services.ProdutoService;
 import br.fiap.com.ms.produto.dto.ProdutoDTO;
+import jakarta.validation.Valid;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,6 +19,13 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    // forçando err0 500 para testes
+//    @Profile("test")
+//    @GetMapping("/--demo/500")
+//        public String force500(){
+//        throw new RuntimeException("Erro 500 forçado para demonstração");
+//        }
 
     @GetMapping
     public ResponseEntity<List<ProdutoDTO>> getAllProdutos(){
@@ -34,7 +44,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDTO> createProduto(@RequestBody ProdutoDTO produtoDTO){
+    public ResponseEntity<ProdutoDTO> createProduto(@RequestBody @Valid ProdutoDTO produtoDTO){
 
         produtoDTO = produtoService.saveProduto(produtoDTO);
 
@@ -49,7 +59,7 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> updateProduto(@PathVariable Long id,
-                                                    @RequestBody ProdutoDTO produtoDTO){
+                                                    @RequestBody @Valid ProdutoDTO produtoDTO){
         produtoDTO = produtoService.updateProduto(id, produtoDTO);
 
         return ResponseEntity.ok(produtoDTO);
