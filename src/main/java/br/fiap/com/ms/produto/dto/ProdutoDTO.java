@@ -1,6 +1,7 @@
 package br.fiap.com.ms.produto.dto;
 
 import br.fiap.com.ms.produto.entities.Produto;
+import br.fiap.com.ms.produto.exceptions.dto.CategoriaDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -27,10 +28,14 @@ public class ProdutoDTO {
     @Positive(message = "O campo valor não pode ser menor que 0")
     private Double valor;
 
+    @NotNull(message = "Campo categoria é requerido")
+    private CategoriaDTO categoria;
+
     public ProdutoDTO(Produto produto) {
         id = produto.getId();
         nome = produto.getNome();
         descricao = produto.getDescricao();
         valor = produto.getValor();
+        categoria = new CategoriaDTO(produto.getCategoria());
     }
 }

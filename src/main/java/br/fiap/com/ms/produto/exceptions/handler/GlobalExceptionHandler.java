@@ -1,5 +1,6 @@
 package br.fiap.com.ms.produto.exceptions.handler;
 
+import br.fiap.com.ms.produto.exceptions.DataBaseException;
 import br.fiap.com.ms.produto.exceptions.ResourceNotFoundException;
 import br.fiap.com.ms.produto.exceptions.dto.CustomErrorDTO;
 import br.fiap.com.ms.produto.exceptions.dto.FieldMessageDTO;
@@ -83,6 +84,15 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<CustomErrorDTO> handleDataBase(DataBaseException e,
+                                                         HttpServletRequest request){
+        HttpStatus status = HttpStatus.CONFLICT;
+        CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(),
+                e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }
 
 
 
